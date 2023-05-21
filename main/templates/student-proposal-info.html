@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/student-proposal-info.css'%}">
+    <title>Student Proposal Info</title>
+</head>
+<body>
+    <h1><span id="loggedInUsername"></span>'s Project Details</h1>
+        <div class="box">
+          <div class="tab">
+            <table id="projectsTable">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Comments</th>
+                  <th>Presentation</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <script>
+      const loggedInUsername = "{{ request.user.username }}";
+      const loggedInUsernameElement = document.getElementById("loggedInUsername");
+      loggedInUsernameElement.textContent = loggedInUsername;
+        </script>
+        <script>
+          const studentRollNumber = "{{ student_roll_number }}";
+    
+          fetch(`/projects?student=${studentRollNumber}`)
+            .then((response) => response.json())
+            .then((data) => populateTable(data));
+    
+          function populateTable(projects) {
+            const tableBody = document.querySelector("#projectsTable tbody");
+            tableBody.innerHTML = "";
+    
+            projects.forEach((project) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${project.title}</td>
+                <td>${project.status}</td>
+                <td>${project.comments}</td>
+                <td>${project.presentation}</td>
+              `;
+              tableBody.appendChild(row);
+            });
+          }
+        </script>
+</body>
+</html>

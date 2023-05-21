@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/AddMembers.css'%}" />
+    <title>Members Enrollment</title>
+  </head>
+  <body>
+    <div class="bgimg">
+      <div class="navbar">
+        <img src="{% static 'images/logo_hazara.png'%}" class="logo" />
+      </div>
+      <div class="box">
+        <div class="container">
+          <div class="top-header">
+            <header>Member Enrollment</header>
+          </div>
+          <form action="" method="POST">
+            <div class="input-field">
+              <input type="text" class="input" placeholder="Name" required />
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="input-field">
+              <input
+                type="text"
+                class="input"
+                placeholder="Designation"
+                required
+              />
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="input-field">
+              <input type="email" class="input" placeholder="E-mail" required />
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div class="input-field">
+              <input
+                type="tel"
+                class="input"
+                placeholder="Phone Number"
+                required
+              />
+              <i class="fa-solid fa-hashtag"></i>
+            </div>
+            <div class="input-field">
+              <input
+                type="password"
+                class="input"
+                placeholder="Password"
+                required
+              />
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="input-field">
+              <input type="submit" class="submit" value="Signup" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

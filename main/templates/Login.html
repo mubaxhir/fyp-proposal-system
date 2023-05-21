@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/Login.css'%}">
+    <script src="https://kit.fontawesome.com/7d940a46c3.js" crossorigin="anonymous"></script>
+    <title>Login</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: sans-serif;
+            font-size: 16px;
+            color: #333333;
+        }
+        
+        .bgimg {
+            background-image: url("{% static 'images/loginBG.jpg' %}");
+            background-size: cover;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            width: 100px;
+            margin: 0 auto;
+        }
+        
+        .box {
+            width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .top-header {
+            display: flex;
+            align-items: center;
+        }
+        
+        .header {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .signin-form {
+            width: 100%;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #000000;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="bgimg">
+        <div class="box">
+            <div class="container">
+                {% comment %} <div class="top-header">
+                    <span>Dont Have an account?</span>
+                    <header>Login</header>
+                </div> {% endcomment %}
+                <img src="{% static 'images/logo_hazara.png'%}" class="logo">
+                <h1>Sign in</h1>
+
+                <h5 style="color:red">{{error}}</h5>
+                <form class="signin-form" method="POST" action="/signin/">
+                    {% csrf_token %}
+                    <input type="text" placeholder="Enter Your Username" id="username" name="username" required><br>
+                    <input type="password" placeholder="Enter Password" id="password" name="password" required><br>
+                    <input type="submit" value="Sign In"> 
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load static %}<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/ProposalInfo.css'%}" />
+    <title>Proposal Info</title>
+  </head>
+  <body>
+    <h1>Projects</h1>
+    <div class="box">
+      <div class="button-container">
+        <button onclick="showAccepted()">Accepted</button>
+        <button onclick="showRejected()">Rejected</button>
+        <button onclick="showPending()">Pending</button>
+      </div>
+      <div class="tab">
+        <table id="projectsTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Roll Number</th>
+              <th>Class</th>
+              <th>Section</th>
+              <th>Status</th>
+              <th>Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows will be dynamically populated using JavaScript -->
+            {% for proposal in proposals %}
+
+            <tr>
+              <td>{{proposal.title}}</td>
+              <td>{{proposal.student.roll_number}}</td>
+              <td>{{proposal.class_field}}</td>
+              <td>{{proposal.section}}</td>
+              <td>{{proposal.status}}</td>
+              <td>{{proposal.comments}}</td>
+            </tr>
+
+            {%endfor%}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script>
+      function showAccepted() {
+        fetch("/projects/accepted")
+          .then((response) => response.json())
+          .then((data) => populateTable(data));
+      }
+
+      function showRejected() {
+        fetch("/projects/rejected")
+          .then((response) => response.json())
+          .then((data) => populateTable(data));
+      }
+
+      function showPending() {
+        fetch("/projects/pending")
+          .then((response) => response.json())
+          .then((data) => populateTable(data));
+      }
+
+      function populateTable(projects) {
+        const tableBody = document.querySelector("#projectsTable tbody");
+        tableBody.innerHTML = "";
+
+        projects.forEach((project) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${project.title}</td>
+                    <td>${project.student.roll_number}</td>
+                    <td>${project.class_field}</td>
+                    <td>${project.section}</td>
+                    <td>${project.status}</td>
+                    <td>${project.comments}</td>
+                `;
+          tableBody.appendChild(row);
+        });
+      }
+    </script>
+  </body>
+</html>

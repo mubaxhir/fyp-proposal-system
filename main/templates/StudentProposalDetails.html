@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/StudentProposalDetail.css'%}" />
+    <title>Student Proposal Details</title>
+  </head>
+  <body>
+    <div class="box">
+      <div class="container">
+        <div class="top-header">
+          <span>Proposal Details</span>
+          <header>Fill This Form</header>
+        </div>
+        <form action='{% url "student_proposal_details" %}' method="POST">
+          {% csrf_token %}
+          <div class="input-field">
+            <label for="PP">Proposed Project</label>
+            <input
+              name="title"
+              id="PP"
+              type="text"
+              class="input"
+              placeholder="Proposal"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <label for="PD">Project Description</label>
+            <textarea id="PD" type="text" class="input" name="desc" placeholder="Project Description" required /></textarea>
+          </div>
+          <div class="input-field">
+            <label for="Cl">Class</label>
+            <input
+            name="class"
+              id="Cl"
+              type="text"
+              class="input"
+              placeholder="e.g. BSCS or BSSE"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <label for="Cl">Section</label>
+            <input
+            name="section"
+              id="Cl"
+              type="text"
+              class="input"
+              placeholder="e.g. A/B/C"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <label for="Cl">Semester</label>
+            <input
+            name="semester"
+              id="Cl"
+              type="text"
+              class="input"
+              placeholder="e.g. 7th or 8th"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <label for="Cl">No. of Students</label>
+            <input
+            name="number_of_student"
+              id="Cl"
+              type="text"
+              class="input"
+              placeholder="e.g. 1-3"
+              required
+            />
+          </div>
+          <div class="input-field">
+            <input
+              type="submit"
+              class="submit"
+              value="Submit"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

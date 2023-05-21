@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+{% load static %}<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="Hazara University, Project Proposals" />
+    <meta name="robots" content="INDEX, Follow" />
+    <link rel="stylesheet" href="Admin.css" />
+    <script
+      src="https://kit.fontawesome.com/7d940a46c3.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Admin</title>
+  </head>
+  <body>
+    <input type="checkbox" id="nav-toggle" />
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <a href="Admin.html">
+          <img src="{% static 'images/logo_hazara.png'%}" class="logo" />
+          <h2>FYP PCMS</h2></a
+        >
+      </div>
+      <div class="sidebar-menu">
+        <ul>
+          <li>
+            <a href="Add Members.html" class="clk">
+              <span><i class="fa-solid fa-user-plus"></i></span>
+              <span>Add Member</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'enrolllment' %}" class="clk">
+              <span><i class="fa-solid fa-user-plus"></i></span>
+              <span>Add Students</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'proposal_info' %}" class="clk">
+              <span><i class="fa-solid fa-file"></i></span>
+              <span>Proposal Info</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'project_proposal' %}" class="clk">
+              <span><i class="fa-solid fa-book"></i></span>
+              <span>Project Proposals</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'student_info' %}" class="clk">
+              <span><i class="fa-solid fa-circle-info"></i></span>
+              <span>Student Info</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'member_info' %}" class="clk">
+              <span><i class="fa-solid fa-circle-info"></i></span>
+              <span>Members Info</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-content">
+      <header>
+        <h2>
+          <label for="nav-toggle">
+            <span>
+              <i class="fa-solid fa-bars"></i>
+            </span>
+          </label>
+        </h2>
+        <div class="user-wrapper">
+          <img src="logo hazara.png" width="30px" height="30px" alt="" />
+          <div>
+            <small> {% if user.is_student %}Student{%else%}Admin{%endif%} </small>
+            <small> Admin </small>
+          </div>
+        </div>
+      </header>
+      <main>
+        <div id="message-modal" class="modal">
+          <div class="modal-content">
+            <h2 style="color: palevioletred">Message</h2>
+            <form
+              action="https://formsubmit.co/1b400833e67ed46c23a57a18ead8d725"
+              method="POST"
+              id="message-form"
+            >
+              <div class="in-put">
+                <!-- <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required /> -->
+
+                <!-- <label for="phone">Phone Number:</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value="{{ phone number }}"
+                  required
+                /> -->
+              </div>
+              <textarea id="message" name="message" required></textarea>
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <!-- <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("message-modal");
+      const closeButton = document.querySelector(".close");
+      const messageForm = document.getElementById("message-form");
+
+      closeButton.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+
+      messageForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const message = document.getElementById("message").value;
+        sendMessage(message);
+        messageForm.reset();
+        modal.style.display = "none";
+      });
+
+      function sendMessage(message) {
+        fetch("/send-message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+          body: JSON.stringify({ message }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            // Handle response data
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      // Helper function to get CSRF token from cookies
+      function getCookie(name) {
+        const cookieValue = document.cookie.match(
+          "(^|;)\\s*" + name + "\\s*=\\s*([^;]+)"
+        );
+        return cookieValue ? cookieValue.pop() : "";
+      }
+    });
+  </script> -->
+</html>

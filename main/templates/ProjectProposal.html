@@ -1,0 +1,191 @@
+<!DOCTYPE html> {% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/ProjectProposal.css'%}" />
+    <title>Project Proposals</title>
+    <script
+      src="https://kit.fontawesome.com/7d940a46c3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="main-content">
+      <header>
+        <div class="side">
+          <img src="{% static 'images/logo_hazara.png'%}" class="logo" />
+          <h2>FYP PCMS</h2>
+        </div>
+      </header>
+    </div>
+    <main>
+      <div id="card">
+        <form action="javaScript:;">
+          <div class="search">
+            <div id="search-container">
+              <input type="text" id="search-input" placeholder="Search here" />
+              <i class="fa"></i>
+            </div>
+          </div>
+          <table id="result-table">
+            <thead>
+              <tr>
+                <th>Project Name</th>
+                <th>Student Name</th>
+                <th>Student's Roll No.</th>
+                <th>Status</th>
+                <th>Presentation</th>
+              </tr>
+            </thead>
+            <tbody id="result-body">
+              <!-- Results will be dynamically populated here -->
+            </tbody>
+          </table>
+        </form>
+        <form action="javaScript:;" id="comment-form">
+          <div id="comment-box">
+            <textarea id="comment-input" placeholder="Comments here"></textarea>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </main>
+    <script>
+      var searchInput = document.getElementById("search-input");
+      var resultBody = document.getElementById("result-body");
+      var commentInput = document.getElementById("comment-input");
+      var searchResults;
+      var proposal_ids = [];
+      const commentForm = document.getElementById("comment-form");
+
+      function createPresentationObject() {
+        // Get the presentation times
+        const presentationTimes = document.querySelectorAll('.presentation_times');
+      
+        // Create an empty object
+        const presentationObject = {};
+      
+        // Loop through the presentation times
+        for (const presentationTime of presentationTimes) {
+          // Get the obj_id
+          const objId = presentationTime.getAttribute('obj_id');
+      
+          // Get the value
+          const value = presentationTime.value;
+      
+          // Add the presentation time to the object
+          presentationObject[objId] = value;
+        }
+      
+        // Return the object
+        return presentationObject;
+      }
+      
+
+      commentForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+      
+        const commentInput = document.getElementById("comment-input");
+        const comment = commentInput.value;
+      
+        const data = {
+          comment: comment,
+          proposals:proposal_ids,
+          presentation_times:createPresentationObject()
+        };
+      
+        // Send the request
+        fetch("/proposal/comments/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+      });
+      // Create a function that will be called when the change event is triggered.
+      function updateStatus(event) {
+        // Get the value of the selected option.
+        var selectedOption = event.target.value;
+        var obj_id = event.target.getAttribute("obj_id");
+        
+        // Call the API with the value of the selected option.
+        fetch("/proposal/update_status/" + obj_id + "/" + selectedOption);
+      }
+
+      function getSearchResults(searchTxt) {}
+
+      // Add an event listener to the search input for the "Enter" key press
+      searchInput.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+          // 13 represents the Enter key
+          // Clear previous search results
+          resultBody.innerHTML = "";
+
+          // Perform the search based on the entered value
+          var searchTerm = searchInput.value.trim();
+
+          // Call a function or make an AJAX request to fetch the search results
+          // and populate the table rows dynamically here
+          // Example:
+          fetch(`/projects/?search=${searchTerm}`)
+            .then((response) => response.json())
+            .then((data) => {
+              searchResults = data;
+              console.log(searchResults);
+              proposal_ids = [];
+              // Loop through the search results and create table rows
+              searchResults.forEach(function (result) {
+                proposal_ids.push(result.id);
+                var row = document.createElement("tr");
+                var projectNameCell = document.createElement("td");
+                projectNameCell.textContent = result.title;
+                var studentNameCell = document.createElement("td");
+                studentNameCell.textContent = result.student.name;
+                var rollNoCell = document.createElement("td");
+                rollNoCell.textContent = result.student.roll_number;
+                var statusCell = document.createElement("td");
+                var statusSelect = document.createElement("select");
+                statusSelect.setAttribute("obj_id", result.id);
+                ["accepted", "rejected", "pending"].forEach(function (status) {
+                  var option = document.createElement("option");
+                  option.value = status;
+                  option.textContent = status;
+                  if (result.status == status){
+                    option.setAttribute("selected", "true");
+                  }
+                  statusSelect.appendChild(option);
+                });
+
+                // Attach the function to the change event of the select input.
+                statusSelect.addEventListener("change", updateStatus);
+
+                statusCell.appendChild(statusSelect);
+
+                var presentationCell = document.createElement("td");
+                try{
+                  var time = result.presentation.slice(0,19);
+                } catch{
+                 var time = '';
+                }
+                presentationCell.innerHTML = `<input class="presentation_times" obj_id="${result.id}" type="datetime-local" name="presentation" value=${time}>`;
+
+                row.appendChild(projectNameCell);
+                row.appendChild(studentNameCell);
+                row.appendChild(rollNoCell);
+                row.appendChild(statusCell);
+                row.appendChild(presentationCell)
+
+                resultBody.appendChild(row);
+              });
+            });
+        }
+      });
+
+      // You can handle the comments as per your requirement
+      // For example, you can store them in a database or display them on the page.
+    </script>
+  </body>
+</html>

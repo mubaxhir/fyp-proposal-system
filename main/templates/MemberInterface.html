@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{% load static %}<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/MemberInterface.css'%}" />
+    <title>Member Interface</title>
+    <script
+      src="https://kit.fontawesome.com/7d940a46c3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <input type="checkbox" id="nav-toggle" />
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <img src="{% static 'images/logo_hazara.png'%}" class="logo" />
+        <h2>FYP PCMS</h2>
+      </div>
+      <div class="sidebar-menu">
+        <ul>
+          <li>
+            <a href="{% url 'proposal_info' %}" class="clk">
+              <span><i class="fa-solid fa-file"></i></span>
+              <span class="s">Proposal Info</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'project_proposal' %}" class="clk">
+              <span><i class="fa-solid fa-book"></i></span>
+              <span>Proposal Presentation</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'student_info' %}" class="clk">
+              <span><i class="fa-solid fa-circle-info"></i></span>
+              <span>Student Info</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'logout' %}" class="clk">
+              <span><i class="fa-solid fa-toggle-off"></i></span>
+              <span>
+                <button id="logoutBtn" style="cursor: pointer">
+                  Logout
+                </button></span
+              >
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-content">
+      <header>
+        <h2>
+          <label for="nav-toggle">
+            <span>
+              <i class="fa-solid fa-bars" style="cursor: pointer"></i>
+            </span>
+          </label>
+        </h2>
+        <div class="user-wrapper">
+          <label
+            for="profile-image"
+            class="upload-label"
+            data-tooltip="Upload Picture"
+          >
+            <input
+              type="file"
+              id="profile-image"
+              accept="image/*"
+              style="display: none"
+            />
+            <img
+              src="{% static 'images/logo_hazara.png'%}"
+              width="30px"
+              height="30px"
+              alt=""
+              class="profile-picture"
+            />
+          </label>
+          <div>
+            <h4> {% if user.is_student %}Student{%else%}Member{%endif%} </h4>
+            <small>Committee Member</small>
+          </div>
+        </div>
+      </header>
+    </div>
+    {% comment %} <script>
+      // Get the logout button element
+      var logoutBtn = document.getElementById("logoutBtn");
+
+      // Add click event listener to the logout button
+      logoutBtn.addEventListener("click", function () {
+        window.location.href = "login.html";
+      });
+    </script> {% endcomment %}
+  </body>
+</html>
