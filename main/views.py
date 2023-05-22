@@ -60,10 +60,17 @@ from django.contrib.auth import authenticate, login, logout
 @login_required(login_url='signin/')
 def index(request):
     user = get_user_model().objects.get(pk=request.user.pk)
-    
     if request.user:
         print(request.user)
-        return redirect('member')
+        try:
+            student = Student.objects.get(user=request.user)
+            return redirect('students')
+        except:
+            try:
+                member = Member.objects.get(user=request.user)
+                return redirect('member')
+            except:
+                return redirect('signin')
     else:
         return redirect('signin')
     
@@ -140,24 +147,45 @@ def signin(request):
 
 @login_required(login_url='signin/')
 def students(request):
-    proposal = Proposal.objects.filter(student__user=request.user)[0]
+    proposal = Proposal.objects.filter(student__user=request.user)
     try:
         review = ProposalReview.objects.get(proposal=proposal).review
         status = 'reviewed'
         due_date = review.get_due_date()
+        context = {
+            'review': review,
+            'status': status,
+            'due_date': due_date,
+            'submitted_date': proposal.datetime
+        }
         
     except ProposalReview.DoesNotExist:
         review = 'Pending'
         status = 'submited'
         due_date = 'N/A'
-        
-    context = {
-        'review': review,
-        'status': status,
-        'due_date': due_date,
-        'submitted_date': proposal.datetime
-    }
+        context = {
+            'review': review,
+            'status': status,
+            'due_date': due_date,
+            'submitted_date': proposal.datetime
+        }
     
+            
+    except Exception as e:
+        print(e)
+        review = 'N/A'
+        status = 'N/A'
+        due_date = 'N/A'
+        
+        context = {
+            'review': review,
+            'status': status,
+            'due_date': due_date,
+            'submitted_date': 'N/A'
+        }
+        
+    context['notifications'] = Notication.objects.all()
+        
     return render(request, 'StudentsInterface.html', context)
   
 
@@ -177,22 +205,35 @@ def enrolllment(request):
 def student_info(request):
     students = Student.objects.all()
     for student in students:
-        props = Proposal.objects.filter(student=student)[0]
-        student.proposal = props.title
-        student.class_field = props.class_field
+        try:
+            props = Proposal.objects.filter(student=student)[0]
+            student.proposal = props.title
+            student.class_field = props.class_field
+        except: 
+            student.proposal = "N/A"
+            student.class_field = "N/A"
     return render( request,'StudentInfo.html', {'students':students})
 
 @login_required(login_url='signin/')
 def student_proposal_info(request):
-    return render( request,'student-proposal-info.html')
+    context = {
+        'student_roll_number' : Student.objects.get(user=request.user).roll_number
+    }
+    return render( request,'student-proposal-info.html', context)
 
 @csrf_exempt
 @login_required(login_url='signin/')
 def projects(request, status='all'):
+    
+    student = request.GET.get('student', '')
+        
     if status=='all':
         proposals = Proposal.objects.all()
     else:  
         proposals = Proposal.objects.filter(status=status)
+        
+    if student:
+        proposals=proposals.filter(student__roll_number=student)
         
     query = request.GET.get('search', '')
     proposals = proposals.filter(title__contains=query)
