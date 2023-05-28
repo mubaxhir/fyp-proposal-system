@@ -8,6 +8,7 @@ from main.forms import StudentProposalForm
 from main.serializers import ProposalSerializer
 from .models import *
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Q
 
 """# from .forms import StudentLoginForm,MemberLoginForm
 # Create your views here.
@@ -233,10 +234,10 @@ def projects(request, status='all'):
         proposals = Proposal.objects.filter(status=status)
         
     if student:
-        proposals=proposals.filter(student__roll_number=student)
+        proposals=proposals.filter(Q(student__roll_number=student) | Q(student_rolls__contains=student))
         
     query = request.GET.get('search', '')
-    proposals = proposals.filter(title__contains=query)
+    proposals = proposals.filter(title__contains=query).order_by('presentation')
     return JsonResponse(ProposalSerializer(proposals, many=True).data, safe=False)
 
 @csrf_exempt
@@ -288,7 +289,17 @@ def student_proposal_details(request):
         desc = request.POST.get('desc')
         student_class = request.POST.get('class')
         student = Student.objects.get(user=request.user)
-        Proposal.objects.create(title=title,description=desc,student=student)
+        student_names = request.POST.getlist('student_name[]')
+        student_rolls = request.POST.getlist('roll_no[]')
+        student_sections = request.POST.getlist('section[]')
+        Proposal.objects.create(
+            title=title,
+            description=desc,
+            student=student,
+            student_names=','.join(student_names),
+            student_rolls=','.join(student_rolls) ,
+            student_sections=','.join(student_sections)
+        )
         
         return redirect('students')  # Redirect to the students page after form submission
     

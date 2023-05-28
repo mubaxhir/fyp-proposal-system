@@ -15,9 +15,11 @@
               <thead>
                 <tr>
                   <th>Title</th>
+                  <th>Roll Numbers</th>
+                  <th>Sections</th>
                   <th>Status</th>
                   <th>Comments</th>
-                  <th>Presentation</th>
+                  <th>Presentation Time</th>
                 </tr>
               </thead>
               <tbody>
@@ -45,6 +47,8 @@
               const row = document.createElement("tr");
               row.innerHTML = `
                 <td>${project.title}</td>
+                <td>${project.student_rolls}</td>
+                <td>${project.student_sections}</td>
                 <td>${project.status}</td>
                 <td>${project.comments}</td>
                 <td>${project.presentation}</td>

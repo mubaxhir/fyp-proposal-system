@@ -48,7 +48,9 @@ class Proposal(models.Model):
     status = models.CharField(max_length=250, default='pending')
     comments = models.CharField(max_length=250,null=True)
     presentation = models.DateTimeField(null=True)
-
+    student_names = models.CharField(max_length=250,null=True)
+    student_rolls = models.CharField(max_length=250,null=True)
+    student_sections = models.CharField(max_length=250,null=True)
     
 class ProposalReview(models.Model):
     teacher = models.ForeignKey('Member', related_name='student_table', on_delete=models.CASCADE)
