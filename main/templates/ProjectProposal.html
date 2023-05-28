@@ -143,9 +143,9 @@
                 var projectNameCell = document.createElement("td");
                 projectNameCell.textContent = result.title;
                 var studentNameCell = document.createElement("td");
-                studentNameCell.textContent = result.student.name;
+                studentNameCell.textContent = result.student.student_names;
                 var rollNoCell = document.createElement("td");
-                rollNoCell.textContent = result.student.roll_number;
+                rollNoCell.textContent = result.student.student_rolls;
                 var statusCell = document.createElement("td");
                 var statusSelect = document.createElement("select");
                 statusSelect.setAttribute("obj_id", result.id);
